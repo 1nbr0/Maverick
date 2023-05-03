@@ -34,7 +34,7 @@ const LoginForms = () => {
             <TextInput
               id="password"
               type="password"
-              placeholder="*********"
+              placeholder="********"
               required={true}
             />
           </div>
