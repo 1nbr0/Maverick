@@ -3,6 +3,11 @@ body #root {
 }
 
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 80px;
   height: 100%;
 }
 
@@ -18,4 +23,58 @@ body #root {
   border-radius: 0 1rem 1rem 0;
   background-color: rgba(255, 255, 255, 0.98);
   box-shadow: 1px 2px 4px rgb(100 100 100 / 50%);
+}
+
+.header-navbar {
+  padding: 2rem 3rem 0 clamp(8rem,3vw,40rem);
+}
+
+.section-home-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 160px;
+  padding: 0 8vw;
+  padding-bottom: 80px;
+  width: 100%;
+  max-width: 1280rem;
+  margin: 0 auto;
+}
+
+.section-my-plane {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+  gap: 32px;
+}
+
+.section-my-plane .header-warplanes {
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 130%;
+  letter-spacing: -.02em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(224, 229, 235);
+}
+
+.radius-inherit span {
+  display: flex;
+  font-weight: bold;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: inherit;
+  flex: 1;
+  padding: 13.5px 24px;
+  height: 100%;
+  font-size: 14px;
+  border-radius: 14px;
 }

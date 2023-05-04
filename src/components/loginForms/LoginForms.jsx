@@ -1,26 +1,26 @@
-import { Button, Label, TextInput } from 'flowbite-react'
+import { Button, Card, Label, TextInput } from 'flowbite-react'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const LoginForms = () => {
   return (
-    <div className='flex flex-col flex-nowrap justify-center items-center login-box'>
-      <div className='flex items-center'>
-        <h1>Maverick App</h1>
-      </div>
-      <div className='h-full'>
-        <h2 className='mb-3'>Connexion</h2>
+    <div className="max-w-sm w-full">
+      <Card>
+        <div className='flex items-center justify-center'>
+          <h1>Se connecter</h1>
+        </div>
         <form className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">
               <Label
                 htmlFor="email"
-                value="Adresse mail"
+                value="Email"
               />
             </div>
             <TextInput
               id="email"
               type="email"
-              placeholder="name@gmail.com"
+              placeholder="name@flowbite.com"
               required={true}
             />
           </div>
@@ -33,16 +33,16 @@ const LoginForms = () => {
             </div>
             <TextInput
               id="password"
+              placeholder='********'
               type="password"
-              placeholder="********"
               required={true}
             />
           </div>
           <Button type="submit">
-            Se connecter
+            <Link to="/">Connexion</Link>
           </Button>
         </form>
-      </div>
+      </Card>
     </div>
   )
 }

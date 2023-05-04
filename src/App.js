@@ -1,10 +1,17 @@
+import { useLocation } from 'react-router-dom';
 import './App.css';
-import LoginView from './views/LoginView';
+import HeaderNavbar from './components/header/HeaderNav';
+import Navigator from './components/navigation/Navigator';
+import { useState } from 'react';
 
 function App() {
+  const location = useLocation();
+  const isCurrentRouteValid = ['/'].includes(location.pathname);
+
   return (
     <div className="App">
-      <LoginView />
+      {isCurrentRouteValid ? <HeaderNavbar /> : null}
+      <Navigator />
     </div>
   );
 }
