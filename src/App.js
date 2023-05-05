@@ -8,7 +8,7 @@ function App() {
   const isCurrentRouteValid = ["/"].includes(location.pathname);
 
   return (
-    <div className="App">
+    <div className="app">
       {isCurrentRouteValid ? <HeaderNavbar /> : null}
       <Navigator />
     </div>
