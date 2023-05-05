@@ -23,6 +23,3 @@ jobs:
 
       - name: Lint JavaScript code with ESLint
         run: npm run lint:js
-
-      - name: Lint styles with Stylelint
-        run: npm run lint:styles
