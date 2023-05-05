@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install Prettier
+        run: npm install -g prettier
+
       - name: Checkout code
         uses: actions/checkout@v2
 
