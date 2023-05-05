@@ -13,7 +13,7 @@ body #root {
 
 .bg-login {
   height: 100%;
-  background-image: url('../src/assets/images/sunset-top-gun-2.jpeg');
+  background-image: url("../src/assets/images/sunset-top-gun-2.jpeg");
   background-size: cover;
 }
 
@@ -26,7 +26,7 @@ body #root {
 }
 
 .header-navbar {
-  padding: 2rem 3rem 0 clamp(8rem,3vw,40rem);
+  padding: 2rem 3rem 0 clamp(8rem, 3vw, 40rem);
 }
 
 .section-home-view {
@@ -55,7 +55,7 @@ body #root {
   font-weight: 700;
   font-size: 31px;
   line-height: 130%;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
