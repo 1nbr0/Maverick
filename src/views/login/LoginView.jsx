@@ -7,14 +7,17 @@ const LoginView = () => {
 
   const childToParent = (childData) => {
     setData(childData);
-  }
+  };
 
-  console.log(data);
   return (
     <>
       <div className="bg-login">
         <div className="flex h-full flex-col justify-center items-center gap-4 p-6">
-          {data === true ? <RegisterForms childToParent={childToParent} /> : <LoginForms childToParent={childToParent} />}
+          {data === true ? (
+            <RegisterForms childToParent={childToParent} />
+          ) : (
+            <LoginForms childToParent={childToParent} />
+          )}
         </div>
       </div>
     </>

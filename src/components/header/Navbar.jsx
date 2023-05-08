@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/outline";
 import MaverickLogo from "../../assets/images/maverick-icon.jpg";
 import { useNavigate } from "react-router-dom";
+import { useSignOut } from "react-auth-kit";
 
 // profile menu component
 const profileMenuItems = [
@@ -32,7 +33,12 @@ function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
   const navigate = useNavigate();
-  const disconnect = () =>  navigate("/connexion");
+  const signOut = useSignOut();
+
+  const logout = () => {
+    signOut();
+    navigate("/connexion");
+  };
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -42,9 +48,7 @@ function ProfileMenu() {
           color="blue-gray"
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
-          <Typography
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-normal capitalize"
-          >
+          <Typography className="mr-4 ml-2 cursor-pointer py-1.5 font-normal capitalize">
             Robin Turpin
           </Typography>
           <ChevronDownIcon
@@ -61,7 +65,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={isLastItem ? disconnect : closeMenu}
+              onClick={isLastItem ? logout : closeMenu}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -90,7 +94,10 @@ function ProfileMenu() {
 
 export default function ComplexNavbar() {
   return (
-    <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-40 lg:py-10" shadow={false}>
+    <Navbar
+      className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-40 lg:py-10"
+      shadow={false}
+    >
       <div className="relative mx-auto flex items-center text-blue-gray-900">
         <img
           src={MaverickLogo}

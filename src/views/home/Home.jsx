@@ -15,7 +15,12 @@ const Home = () => {
           <div>
             <h2>Mes avions</h2>
           </div>
-          <Button variant="outlined" size="lg" color="light-blue" className="flex items-center gap-3 radius-inherit hover:bg-gradient-to-bl hover:from-cyan-500 hover:to-blue-500 hover:text-white hover:opacity-100">
+          <Button
+            variant="outlined"
+            size="lg"
+            color="light-blue"
+            className="flex items-center gap-3 radius-inherit hover:bg-gradient-to-bl hover:from-cyan-500 hover:to-blue-500 hover:text-white hover:opacity-100"
+          >
             <PlusIcon strokeWidth={2} className="h-6 w-6" /> Nouvel avion
           </Button>
         </div>
