@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const HeaderNavbar = () => {
   return (
-    <Navbar fluid={true} rounded={true} className="header-navbar">
+    <Navbar fluid={false} rounded={false} className="header-navbar">
       <Navbar.Brand href="#">
         <img
           src={MaverickLogo}
