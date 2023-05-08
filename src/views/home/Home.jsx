@@ -1,4 +1,5 @@
-import { Button } from "flowbite-react";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import { Button } from "@material-tailwind/react";
 import React from "react";
 
 const Home = () => {
@@ -15,25 +16,12 @@ const Home = () => {
             <h2>Mes avions</h2>
           </div>
           <Button
-            outline={true}
-            gradientDuoTone="cyanToBlue"
-            className="radius-inherit"
+            variant="outlined"
+            size="lg"
+            color="light-blue"
+            className="flex items-center gap-3 radius-inherit hover:bg-gradient-to-bl hover:from-cyan-500 hover:to-blue-500 hover:text-white hover:opacity-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-            Nouvel avion
+            <PlusIcon strokeWidth={2} className="h-6 w-6" /> Nouvel avion
           </Button>
         </div>
       </section>

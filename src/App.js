@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import "./App.css";
-import HeaderNavbar from "./components/header/HeaderNav";
 import Navigator from "./components/navigation/Navigator";
+import ComplexNavbar from "./components/header/Navbar";
 
 function App() {
   const location = useLocation();
@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="app">
-      {isCurrentRouteValid ? <HeaderNavbar /> : null}
+      {isCurrentRouteValid ? <ComplexNavbar /> : null}
       <Navigator />
     </div>
   );
