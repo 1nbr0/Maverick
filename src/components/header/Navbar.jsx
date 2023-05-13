@@ -16,6 +16,7 @@ import {
 import MaverickLogo from "../../assets/images/maverick-icon.jpg";
 import { useNavigate } from "react-router-dom";
 import { useSignOut } from "react-auth-kit";
+import Modal from "../modal/Modal";
 
 // profile menu component
 const profileMenuItems = [
@@ -31,9 +32,11 @@ const profileMenuItems = [
 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const closeMenu = () => setIsMenuOpen(false);
   const navigate = useNavigate();
   const signOut = useSignOut();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
 
   const logout = () => {
     signOut();
@@ -65,7 +68,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={isLastItem ? logout : closeMenu}
+              onClick={isLastItem ? logout : handleOpen}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
@@ -88,11 +91,12 @@ function ProfileMenu() {
           );
         })}
       </MenuList>
+      <Modal openModal={open} handleOpen={handleOpen} />
     </Menu>
   );
 }
 
-export default function ComplexNavbar() {
+export default function ComplexNavbar({ handleOpen }) {
   return (
     <Navbar
       className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-40 lg:py-10"

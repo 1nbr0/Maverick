@@ -1,40 +1,18 @@
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { Fragment, useState } from "react";
 import {
-  Card,
-  Input,
-  Checkbox,
   Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  IconButton,
   Typography,
-  CardBody,
-  CardHeader,
-  CardFooter,
+  Input,
 } from "@material-tailwind/react";
-import axios, { AxiosError } from "axios";
+import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 
-export default function RegisterForms({ childToParent }) {
-  const data = false;
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    setError("");
-
-    try {
-      await axios.post("https://localhost/api/register", values);
-      navigate("/connexion");
-    } catch (err) {
-      if (err && err instanceof AxiosError) {
-        setError(err.response?.data.message);
-      } else if (err && err instanceof Error) {
-        setError(err.message);
-      }
-
-      console.log("Error", err);
-    }
-  };
+export default function Modal({ openModal, handleOpen }) {
 
   const validate = (values) => {
     const errors = {};
@@ -69,41 +47,36 @@ export default function RegisterForms({ childToParent }) {
       roles: [],
     },
     validate,
-    onSubmit,
   });
 
   return (
-    <Card color="white" shadow={false}>
-      <CardHeader
-        floated={false}
-        shadow={false}
-        className="grid h-20 place-items-center"
+    <Fragment>
+      <Dialog
+        open={openModal}
+        handler={handleOpen}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="p-5"
       >
-        <Typography variant="h3" className="font-normal" color="black">
-          S'inscrire
-        </Typography>
-      </CardHeader>
-      <form
-        className="mb-2 w-80 max-w-screen-lg sm:w-96"
-        onSubmit={formik.handleSubmit}
-      >
-        <CardBody className="flex flex-col gap-4">
-          <Typography color="gray" className="mt-1 font-normal">
-            Saisissez vos coordonnées pour vous inscrire.
+        <DialogHeader className="justify-between">
+          <Typography variant="h5" color="blue-gray">
+            Mon Compte
           </Typography>
-          {error ? (
-            <Typography
-              variant="small"
-              color="red"
-              className="flex items-center gap-1 font-normal"
-            >
-              {error}
-            </Typography>
-          ) : null}
+          <IconButton
+            color="blue-gray"
+            size="sm"
+            variant="text"
+            onClick={handleOpen}
+          >
+            <XMarkIcon strokeWidth={2} className="h-5 w-5" />
+          </IconButton>
+        </DialogHeader>
+        <DialogBody className="px-5 pt-10">
           <div className="mb-4 flex flex-col gap-6">
             <Input
               size="lg"
-              className="rounded-lg"
               label="Nom d'utilisateur"
               id="username"
               type="text"
@@ -126,7 +99,6 @@ export default function RegisterForms({ childToParent }) {
             ) : null}
             <Input
               size="lg"
-              className="rounded-lg"
               label="Email"
               id="email"
               type="email"
@@ -150,7 +122,6 @@ export default function RegisterForms({ childToParent }) {
             <Input
               label="Mot de passe"
               size="lg"
-              className="rounded-lg"
               id="password"
               type="password"
               onChange={formik.handleChange}
@@ -171,43 +142,13 @@ export default function RegisterForms({ childToParent }) {
               </Typography>
             ) : null}
           </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
-              >
-                J'accepte les
-                <Link
-                  to={"#"}
-                  className="font-medium transition-colors hover:text-blue-500"
-                >
-                  &nbsp;Conditions générales
-                </Link>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
-        </CardBody>
-        <CardFooter className="pt-0">
-          <Button type="submit" fullWidth color="light-blue">
-            Inscription
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="gradient" color="light-blue" onClick={handleOpen}>
+            <span>Confirm</span>
           </Button>
-          <Typography variant="small" className="mt-6 flex justify-center">
-            Déjà un compte ?
-            <Typography
-              as="a"
-              onClick={() => childToParent(data)}
-              variant="small"
-              color="light-blue"
-              className="ml-1 font-bold cursor-pointer"
-            >
-              Se connecter
-            </Typography>
-          </Typography>
-        </CardFooter>
-      </form>
-    </Card>
+        </DialogFooter>
+      </Dialog>
+    </Fragment>
   );
 }
