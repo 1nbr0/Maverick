@@ -110,7 +110,7 @@ export default function ComplexNavbar({ handleOpen }) {
         />
         <Typography
           as="a"
-          href="#"
+          href="/"
           className="self-center mr-4 ml-2 text-2xl whitespace-nowrap cursor-pointer py-1.5 font-semibold"
         >
           Maverick

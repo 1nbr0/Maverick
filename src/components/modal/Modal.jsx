@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -9,10 +9,27 @@ import {
   Typography,
   Input,
 } from "@material-tailwind/react";
-import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  InformationCircleIcon,
+  TrashIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
+// import jwtDecode from "jwt-decode";
+// import axios from "axios";
 
 export default function Modal({ openModal, handleOpen }) {
+  // const [currentUser, setCurrentUser] = useState({});
+
+  // function getCurrentUserId() {
+  //   let token = localStorage.getItem("_auth");
+  //   if (token) {
+  //     let decodedToken = jwtDecode(token);
+  //     return decodedToken.id;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   const validate = (values) => {
     const errors = {};
@@ -142,10 +159,25 @@ export default function Modal({ openModal, handleOpen }) {
               </Typography>
             ) : null}
           </div>
+          <div className="mt-10">
+            <Typography variant="h5" color="blue-gray" className="pb-6">
+              Options Avancées
+            </Typography>
+            <Button
+              variant="outlined"
+              color="red"
+              onClick={handleOpen}
+              fullWidth
+              className="flex items-center justify-center gap-3"
+            >
+              <TrashIcon strokeWidth={2} className="h-5 w-5" /> Supprimer mon
+              compte
+            </Button>
+          </div>
         </DialogBody>
         <DialogFooter>
           <Button variant="gradient" color="light-blue" onClick={handleOpen}>
-            <span>Confirm</span>
+            Mettre à jour
           </Button>
         </DialogFooter>
       </Dialog>

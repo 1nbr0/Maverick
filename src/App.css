@@ -7,7 +7,7 @@ body #root {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  gap: 80px;
+  gap: 40px;
   height: 100%;
 }
 
@@ -34,9 +34,8 @@ body #root {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  gap: 160px;
   padding: 0 8vw;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
   width: 100%;
   max-width: 1280rem;
   margin: 0 auto;
@@ -64,6 +63,19 @@ body #root {
   border-bottom: 1px solid rgba(224 229 235);
 }
 
+.block-create-plane .header-warplanes {
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 130%;
+  letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(224 229 235);
+}
+
 .radius-inherit span {
   display: flex;
   font-weight: bold;
@@ -79,5 +91,5 @@ body #root {
 }
 
 .border-light-blue-500 {
-  border-color: linear-gradient(30deg, #3F83F8, #06b6d4);
+  border-color: linear-gradient(30deg, #3f83f8, #06b6d4);
 }
