@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Typography,
@@ -17,6 +17,7 @@ import MaverickLogo from "../../assets/images/maverick-icon.jpg";
 import { useNavigate } from "react-router-dom";
 import { useSignOut } from "react-auth-kit";
 import Modal from "../modal/Modal";
+import { getCurrentUser } from "../../services/auth.service";
 
 // profile menu component
 const profileMenuItems = [
@@ -30,7 +31,7 @@ const profileMenuItems = [
   },
 ];
 
-function ProfileMenu() {
+function ProfileMenu({ userData }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const signOut = useSignOut();
@@ -52,7 +53,7 @@ function ProfileMenu() {
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
           <Typography className="mr-4 ml-2 cursor-pointer py-1.5 font-normal capitalize">
-            Robin Turpin
+            {userData.username ? userData.username : ""}
           </Typography>
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -91,12 +92,33 @@ function ProfileMenu() {
           );
         })}
       </MenuList>
-      <Modal openModal={open} handleOpen={handleOpen} />
+      <Modal openModal={open} handleOpen={handleOpen} userData={userData} />
     </Menu>
   );
 }
 
 export default function ComplexNavbar({ handleOpen }) {
+  const [currentUser, setCurrentUser] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const userData = await getCurrentUser();
+        if (userData !== false) {
+          setCurrentUser(userData); // Les données de l'utilisateur sont affichées ici
+        } else {
+          console.log("L'identifiant de l'utilisateur n'est pas disponible.");
+        }
+      } catch (error) {
+        console.error(
+          "Une erreur s'est produite lors de la récupération des données de l'utilisateur :",
+          error
+        );
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <Navbar
       className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-40 lg:py-10"
@@ -115,7 +137,7 @@ export default function ComplexNavbar({ handleOpen }) {
         >
           Maverick
         </Typography>
-        <ProfileMenu />
+        <ProfileMenu userData={currentUser} />
       </div>
     </Navbar>
   );

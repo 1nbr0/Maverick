@@ -1,4 +1,3 @@
-import { Fragment, useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -15,24 +14,15 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
-// import jwtDecode from "jwt-decode";
-// import axios from "axios";
+import { deleteUser } from "../../services/apiRequest";
+import { getCurrentUserId } from "../../services/auth.service";
+import { useNavigate } from "react-router-dom";
 
-export default function Modal({ openModal, handleOpen }) {
-  // const [currentUser, setCurrentUser] = useState({});
-
-  // function getCurrentUserId() {
-  //   let token = localStorage.getItem("_auth");
-  //   if (token) {
-  //     let decodedToken = jwtDecode(token);
-  //     return decodedToken.id;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
+export default function Modal({ openModal, handleOpen, userData }) {
+  const navigate = useNavigate();
   const validate = (values) => {
     const errors = {};
+    console.log(values.username);
     if (!values.username) {
       errors.username = "Le nom d'utilisateur est requis";
     } else if (values.username.length > 20) {
@@ -61,13 +51,20 @@ export default function Modal({ openModal, handleOpen }) {
       username: "",
       email: "",
       password: "",
-      roles: [],
     },
     validate,
   });
 
+  const deleteAccount = () => {
+    const userId = getCurrentUserId();
+    const isAccountDelete = deleteUser(userId);
+    if (isAccountDelete) {
+      navigate("/connexion");
+    }
+  };
+
   return (
-    <Fragment>
+    <>
       <Dialog
         open={openModal}
         handler={handleOpen}
@@ -98,7 +95,11 @@ export default function Modal({ openModal, handleOpen }) {
               id="username"
               type="text"
               onChange={formik.handleChange}
-              value={formik.values.username}
+              value={
+                formik.values.username === ""
+                  ? userData.username
+                  : formik.values.username
+              }
               error={formik.errors.username ? true : false}
               success={
                 formik.values.username && !formik.errors.username ? true : false
@@ -120,7 +121,11 @@ export default function Modal({ openModal, handleOpen }) {
               id="email"
               type="email"
               onChange={formik.handleChange}
-              value={formik.values.email}
+              value={
+                formik.values.email === ""
+                  ? userData.email
+                  : formik.values.email
+              }
               error={formik.errors.email ? true : false}
               success={
                 formik.values.email && !formik.errors.email ? true : false
@@ -166,7 +171,7 @@ export default function Modal({ openModal, handleOpen }) {
             <Button
               variant="outlined"
               color="red"
-              onClick={handleOpen}
+              onClick={deleteAccount}
               fullWidth
               className="flex items-center justify-center gap-3"
             >
@@ -181,6 +186,6 @@ export default function Modal({ openModal, handleOpen }) {
           </Button>
         </DialogFooter>
       </Dialog>
-    </Fragment>
+    </>
   );
 }

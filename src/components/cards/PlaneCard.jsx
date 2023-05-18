@@ -9,9 +9,10 @@ import {
 import MenuCard from "../menu/MenuCard";
 import { useNavigate } from "react-router-dom";
 
-const PlaneCard = () => {
+const PlaneCard = (props) => {
   const [isHover, setIsHover] = useState(false);
   const navigate = useNavigate();
+  const { warplane } = props;
 
   const onMouseEnterCard = () => {
     setIsHover(true);
@@ -39,12 +40,9 @@ const PlaneCard = () => {
       </CardHeader>
       <CardBody className="rounded-lg">
         <Typography variant="h5" color="blue-gray" className="mb-2">
-          Rafale M
+          {warplane.name}
         </Typography>
-        <Typography>
-          The place is close to Barceloneta Beach and bus stop just 2 min by
-          walk.
-        </Typography>
+        <Typography>Armement : {warplane.armament}</Typography>
       </CardBody>
     </Card>
   );
