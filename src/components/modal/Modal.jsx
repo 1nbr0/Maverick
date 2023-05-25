@@ -97,7 +97,7 @@ export default function Modal({ openModal, handleOpen, userData }) {
               onChange={formik.handleChange}
               value={
                 formik.values.username === ""
-                  ? userData.username
+                  ? userData?.username
                   : formik.values.username
               }
               error={formik.errors.username ? true : false}
@@ -123,7 +123,7 @@ export default function Modal({ openModal, handleOpen, userData }) {
               onChange={formik.handleChange}
               value={
                 formik.values.email === ""
-                  ? userData.email
+                  ? userData?.email
                   : formik.values.email
               }
               error={formik.errors.email ? true : false}

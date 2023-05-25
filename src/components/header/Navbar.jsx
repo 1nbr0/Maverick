@@ -53,7 +53,7 @@ function ProfileMenu({ userData }) {
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
           <Typography className="mr-4 ml-2 cursor-pointer py-1.5 font-normal capitalize">
-            {userData.username ? userData.username : ""}
+            {userData?.username ? userData?.username : ""}
           </Typography>
           <ChevronDownIcon
             strokeWidth={2.5}

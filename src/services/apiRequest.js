@@ -18,4 +18,13 @@ const deleteUser = async (id) => {
   }
 };
 
-export { getWarplanesByUserId, deleteUser };
+const deleteWarplaneById = async (id) => {
+  try {
+    await apiInstance.delete(`/warplanes/${id}`);
+    return true;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getWarplanesByUserId, deleteUser, deleteWarplaneById };

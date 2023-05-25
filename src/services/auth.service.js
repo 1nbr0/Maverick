@@ -16,11 +16,11 @@ const apiInstance = axios.create({
 const getCurrentUser = async () => {
   try {
     const id = getCurrentUserId();
-    if (id !== false) {
+    if (id) {
       const response = await apiInstance.get(`/users/` + id);
       return response.data;
     } else {
-      return false;
+      return null;
     }
   } catch (error) {
     console.error(error);
@@ -28,13 +28,8 @@ const getCurrentUser = async () => {
 };
 
 function getCurrentUserId() {
-  let token = localStorage.getItem("_auth");
-  if (token) {
-    let decodedToken = jwtDecode(token);
-    return decodedToken.id;
-  } else {
-    return false;
-  }
+  const token = localStorage.getItem("_auth");
+  return token ? jwtDecode(token).id : null;
 }
 
 function checkToken() {

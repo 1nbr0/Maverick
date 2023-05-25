@@ -22,19 +22,15 @@ const PlaneCard = (props) => {
     setIsHover(false);
   };
 
-  const onHandleClickCard = () => {
-    navigate("/avion/detail/1");
-  };
-
   return (
     <Card
       className="mt-6 w-96 rounded-lg hover:cursor-pointer"
       onMouseEnter={onMouseEnterCard}
       onMouseLeave={onMouseLeaveCard}
-      onClick={onHandleClickCard}
+      onClick={() => navigate(`/avion/${warplane.id}`)}
     >
       <CardHeader color="blue-gray" className="relative h-56 rounded-lg">
-        <img src={imagePlaneCard} alt="img-blur-shadow" layout="fill" />
+        <img src={warplane?.filePath} alt="média de l'avion" layout="fill" />
         <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
         <MenuCard isHover={isHover} />
       </CardHeader>
