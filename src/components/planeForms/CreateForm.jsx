@@ -4,10 +4,12 @@ import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { apiInstance, getCurrentUserId } from "../../services/auth.service";
+import { useNavigate } from "react-router-dom";
 
 function CreateForm() {
   const [file, setFile] = useState();
   const [error, setError] = useState();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -34,7 +36,9 @@ function CreateForm() {
           },
         }
       );
-      console.log(response);
+      if (response) {
+        navigate("/");
+      }
     } catch (err) {
       if (err && err instanceof AxiosError) {
         setError(err.response?.data.message);

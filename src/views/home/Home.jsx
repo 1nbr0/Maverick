@@ -160,6 +160,24 @@ const Home = () => {
         </div>
         <WarplanesList />
       </section>
+      <section className="section-my-plane mb-10">
+        <div className="header-warplanes">
+          <div>
+            <h2>Mes plan de vol</h2>
+          </div>
+          <Link to={"/nouveau-plan-de-vol"}>
+            <Button
+              variant="outlined"
+              size="lg"
+              color="light-blue"
+              className="flex items-center gap-3 radius-inherit hover:bg-gradient-to-bl hover:from-cyan-500 hover:to-blue-500 hover:text-white hover:opacity-100"
+            >
+              <PlusIcon strokeWidth={2} className="h-6 w-6" /> Nouveau plan de
+              vol
+            </Button>
+          </Link>
+        </div>
+      </section>
     </main>
   );
 };

@@ -14,16 +14,6 @@ const apiInstance = axios.create({
   timeout: 10000,
 });
 
-const apiInstancePostWarplane = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "multipart/form-data",
-    accept: "application/ld+json",
-  },
-  timeout: 10000,
-});
-
 const getCurrentUser = async () => {
   try {
     const id = getCurrentUserId();
@@ -59,11 +49,4 @@ function checkToken() {
   }
 }
 
-export {
-  getCurrentUser,
-  getCurrentUserId,
-  checkToken,
-  apiInstance,
-  apiInstancePostWarplane,
-  appUrl,
-};
+export { getCurrentUser, getCurrentUserId, checkToken, apiInstance, appUrl };
