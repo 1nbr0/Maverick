@@ -2,6 +2,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 const token = localStorage.getItem("_auth");
+const appUrl = process.env.REACT_APP_BASE_URL;
 
 const apiInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -9,6 +10,16 @@ const apiInstance = axios.create({
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
     Accept: "application/json",
+  },
+  timeout: 10000,
+});
+
+const apiInstancePostWarplane = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data",
+    accept: "application/ld+json",
   },
   timeout: 10000,
 });
@@ -48,4 +59,11 @@ function checkToken() {
   }
 }
 
-export { getCurrentUser, getCurrentUserId, checkToken, apiInstance };
+export {
+  getCurrentUser,
+  getCurrentUserId,
+  checkToken,
+  apiInstance,
+  apiInstancePostWarplane,
+  appUrl,
+};

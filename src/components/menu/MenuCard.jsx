@@ -14,22 +14,46 @@ import {
 } from "@material-tailwind/react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { getCurrentUserId } from "../../services/auth.service";
-import { deleteWarplaneById } from "../../services/apiRequest";
+import { apiInstance } from "../../services/auth.service";
 
-function MenuCard({ isHover }) {
+function MenuCard({ isHover, warplaneId }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = (event) => {
+    event.stopPropagation();
+    setOpen(!open);
+  };
 
-  const handleClickEdit = () => {
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
+  const handleClickEdit = (event) => {
+    event.stopPropagation();
     navigate("/avion/edition/1");
   };
 
-  const handleDeleteWarplane = () => {
-    const userId = getCurrentUserId();
-    deleteWarplaneById(userId);
+  const handleCancelDelete = (event) => {
+    event.stopPropagation();
+    setOpen(!open);
+  };
+
+  const deleteWarplane = async (warplaneId) => {
+    try {
+      if (!warplaneId) {
+        throw new Error("No user id");
+      }
+      await apiInstance.delete(`/warplanes/${warplaneId}`);
+      refreshPage();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteWarplane = (event) => {
+    event.stopPropagation();
+    deleteWarplane(warplaneId);
   };
 
   return (
@@ -57,7 +81,10 @@ function MenuCard({ isHover }) {
               </Typography>
             </div>
           </MenuItem>
-          <MenuItem className="flex items-center py-1 pr-4 pl-1">
+          <MenuItem
+            className="flex items-center py-1 pr-4 pl-1"
+            onClick={handleOpen}
+          >
             <div className="flex flex-col gap-1">
               <Typography variant="small" color="gray" className="font-normal">
                 <span className="font-medium text-red-900">Supprimer</span>
@@ -67,24 +94,22 @@ function MenuCard({ isHover }) {
         </MenuList>
       </Menu>
       <Dialog open={open} size="xs" handler={handleOpen}>
-        <DialogHeader>Its a simple dialog.</DialogHeader>
+        <DialogHeader>Supprimer un avion</DialogHeader>
         <DialogBody divider>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus ad
-          reprehenderit omnis perspiciatis aut odit! Unde architecto
-          perspiciatis, dolorum dolorem iure quia saepe autem accusamus eum
-          praesentium magni corrupti explicabo!
+          Cela supprimera définitivement l'avion. Êtes-vous sûr de vouloir
+          supprimer cet avion ?
         </DialogBody>
         <DialogFooter>
           <Button
             variant="text"
             color="light-blue"
-            onClick={() => handleOpen(null)}
+            onClick={handleCancelDelete}
             className="mr-1"
           >
             <span>Annuler</span>
           </Button>
           <Button variant="gradient" color="red" onClick={handleDeleteWarplane}>
-            <span>Supprimer</span>
+            <span>Supprimer cet avion</span>
           </Button>
         </DialogFooter>
       </Dialog>

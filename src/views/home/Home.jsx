@@ -8,7 +8,6 @@ import {
   getCurrentUser,
   getCurrentUserId,
 } from "../../services/auth.service";
-import { getWarplanesByUserId } from "../../services/apiRequest.js";
 
 const useUserWarplanes = () => {
   const [warplanes, setWarplanes] = useState(null);
@@ -57,8 +56,9 @@ const WarplanesList = () => {
     <>
       {warplanes.length === 0 ? (
         <div className="text-center">
-          <h1 className="text-2xl font-bold">
-            Aucun avion relié à cet utilisateur
+          <h1 className="text-2xl font-normal">
+            Nous avons perdu la communication avec la tour de contrôle. Il n'y a
+            aucun avion à disposition. Ajoute en un !
           </h1>
         </div>
       ) : (
@@ -104,7 +104,7 @@ const UserDisplayName = () => {
   if (error) {
     return (
       <div className="flex items-center">
-        <Typography variant="h1" className="text-2xl font-normal mr-3">
+        <Typography variant="h1" className="text-2xl mr-3">
           {error.message}
         </Typography>
       </div>
@@ -120,21 +120,11 @@ const UserDisplayName = () => {
   }
 
   return (
-    <>
-      <div className="flex items-center">
-        <Typography variant="h1" className="text-3xl font-normal mr-3">
-          Bonjour
-        </Typography>
-        <Chip
-          value={currentUser?.username ? currentUser?.username : ""}
-          variant="ghost"
-          className="text-2xl mr-3"
-        />
-        <Typography variant="h1" className="text-3xl">
-          🫡
-        </Typography>
-      </div>
-    </>
+    <Chip
+      value={currentUser?.username ? currentUser?.username : ""}
+      variant="ghost"
+      className="text-2xl mr-3"
+    />
   );
 };
 
@@ -142,7 +132,15 @@ const Home = () => {
   return (
     <main className="container mx-auto px-4">
       <section className="section-home-view">
-        <UserDisplayName />
+        <div className="flex items-center">
+          <Typography variant="h1" className="text-3xl font-normal mr-3">
+            Bonjour
+          </Typography>
+          <UserDisplayName />
+          <Typography variant="h1" className="text-3xl">
+            🫡
+          </Typography>
+        </div>
       </section>
       <section className="section-my-plane mb-10">
         <div className="header-warplanes">

@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
   IconButton,
   Typography,
   Input,
@@ -14,8 +13,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
-import { deleteUser } from "../../services/apiRequest";
-import { getCurrentUserId } from "../../services/auth.service";
+import { apiInstance, getCurrentUserId } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
 export default function Modal({ openModal, handleOpen, userData }) {
@@ -55,11 +53,17 @@ export default function Modal({ openModal, handleOpen, userData }) {
     validate,
   });
 
-  const deleteAccount = () => {
-    const userId = getCurrentUserId();
-    const isAccountDelete = deleteUser(userId);
-    if (isAccountDelete) {
+  const deleteAccount = async () => {
+    try {
+      const userId = getCurrentUserId();
+      if (!userId) {
+        throw new Error("No user id");
+      }
+      await apiInstance.delete(`/users/${userId}`);
+      localStorage.clear();
       navigate("/connexion");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -163,6 +167,9 @@ export default function Modal({ openModal, handleOpen, userData }) {
                 {formik.errors.password}
               </Typography>
             ) : null}
+            <Button variant="gradient" color="light-blue" onClick={handleOpen}>
+              Mettre à jour
+            </Button>
           </div>
           <div className="mt-10">
             <Typography variant="h5" color="blue-gray" className="pb-6">
@@ -180,11 +187,6 @@ export default function Modal({ openModal, handleOpen, userData }) {
             </Button>
           </div>
         </DialogBody>
-        <DialogFooter>
-          <Button variant="gradient" color="light-blue" onClick={handleOpen}>
-            Mettre à jour
-          </Button>
-        </DialogFooter>
       </Dialog>
     </>
   );
