@@ -1,5 +1,15 @@
-import { PlusIcon } from "@heroicons/react/24/outline";
-import { Button, Chip, Spinner, Typography } from "@material-tailwind/react";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Button,
+  Chip,
+  IconButton,
+  Spinner,
+  Typography,
+} from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import PlaneCard from "../../components/cards/PlaneCard";
 import { Link } from "react-router-dom";
@@ -12,6 +22,8 @@ import {
 const useUserWarplanes = () => {
   const [warplanes, setWarplanes] = useState(null);
   const [error, setError] = useState(null);
+  const [active, setActive] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchWarplanes = async () => {
@@ -20,9 +32,19 @@ const useUserWarplanes = () => {
         if (!userId) {
           throw new Error("No user id");
         }
-        const response = await apiInstance.get(`/users/${userId}/warplanes`);
+        const response = await apiInstance.get(
+          `/users/${userId}/warplanes?page=${active}`,
+          {
+            headers: {
+              accept: `application/ld+json;`,
+            },
+          }
+        );
         if (!ignore) {
-          setWarplanes(response.data);
+          setWarplanes(response.data["hydra:member"]);
+          setTotalPages(
+            response.data["hydra:view"]["hydra:last"].split("=")[1]
+          );
         }
       } catch (error) {
         console.error(error);
@@ -37,13 +59,61 @@ const useUserWarplanes = () => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [active]);
 
-  return { warplanes, error };
+  const getItemProps = (index) => ({
+    variant: active === index ? "filled" : "text",
+    color: active === index ? "blue" : "blue-gray",
+    onClick: () => setActive(index),
+  });
+
+  const next = () => {
+    if (active === totalPages) return;
+
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+
+    setActive(active - 1);
+  };
+
+  const renderPageButtons = () => {
+    const buttons = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <IconButton key={i} {...getItemProps(i)}>
+          {i}
+        </IconButton>
+      );
+    }
+
+    return buttons;
+  };
+
+  return {
+    warplanes,
+    error,
+    renderPageButtons,
+    prev,
+    next,
+    active,
+    totalPages,
+  };
 };
 
 const WarplanesList = () => {
-  const { warplanes, error } = useUserWarplanes();
+  const {
+    warplanes,
+    error,
+    renderPageButtons,
+    prev,
+    next,
+    active,
+    totalPages,
+  } = useUserWarplanes();
 
   if (error) {
     return (
@@ -77,6 +147,28 @@ const WarplanesList = () => {
           ))}
         </div>
       )}
+      <div className="flex justify-center items-center gap-4">
+        <Button
+          variant="text"
+          color="blue-gray"
+          className="flex items-center gap-2"
+          onClick={prev}
+          disabled={active === 1}
+        >
+          <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+        </Button>
+        <div className="flex items-center gap-2">{renderPageButtons()}</div>
+        <Button
+          variant="text"
+          color="blue-gray"
+          className="flex items-center gap-2"
+          onClick={next}
+          disabled={active === totalPages}
+        >
+          Next
+          <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+        </Button>
+      </div>
     </>
   );
 };
