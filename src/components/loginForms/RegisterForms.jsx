@@ -23,7 +23,6 @@ import Cgu from "../rgpd/Cgu";
 export default function RegisterForms({ childToParent }) {
   const data = false;
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -32,7 +31,15 @@ export default function RegisterForms({ childToParent }) {
     setError("");
 
     try {
-      await axios.post("https://localhost/api/register", values);
+      const response = await axios.post(
+        "https://localhost/api/register",
+        values
+      );
+
+      if (response) {
+        localStorage.setItem("refresh_token", response.data.refreshToken);
+      }
+
       childToParent(data);
     } catch (err) {
       if (err && err instanceof AxiosError) {
@@ -40,7 +47,6 @@ export default function RegisterForms({ childToParent }) {
       } else if (err && err instanceof Error) {
         setError(err.message);
       }
-
       console.log("Error", err);
     }
   };

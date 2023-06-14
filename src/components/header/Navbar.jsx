@@ -15,7 +15,6 @@ import {
 } from "@heroicons/react/24/outline";
 import MaverickLogo from "../../assets/images/maverick-icon.jpg";
 import { useNavigate } from "react-router-dom";
-import { useSignOut } from "react-auth-kit";
 import Modal from "../modal/Modal";
 import { getCurrentUser } from "../../services/auth.service";
 
@@ -34,13 +33,12 @@ const profileMenuItems = [
 function ProfileMenu({ userData }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const signOut = useSignOut();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
 
   const logout = () => {
-    signOut();
+    localStorage.clear();
     navigate("/connexion");
   };
 

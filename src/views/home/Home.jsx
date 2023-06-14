@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import {
   apiInstance,
   getCurrentUser,
-  getCurrentUserId,
+  CurrentUserId,
 } from "../../services/auth.service";
 
 const useUserWarplanes = () => {
@@ -16,18 +16,27 @@ const useUserWarplanes = () => {
   useEffect(() => {
     const fetchWarplanes = async () => {
       try {
-        const userId = getCurrentUserId();
+        const userId = CurrentUserId();
         if (!userId) {
           throw new Error("No user id");
         }
         const response = await apiInstance.get(`/users/${userId}/warplanes`);
-        setWarplanes(response.data);
+        if (!ignore) {
+          setWarplanes(response.data);
+        }
       } catch (error) {
         console.error(error);
         setError(error);
       }
     };
+
+    let ignore = false;
+
     fetchWarplanes();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return { warplanes, error };

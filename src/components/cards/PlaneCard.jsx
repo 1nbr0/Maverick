@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react";
 import MenuCard from "../menu/MenuCard";
 import { useNavigate } from "react-router-dom";
-import { appUrl } from "../../services/auth.service";
+import { baseUrl } from "../../services/auth.service";
 
 const PlaneCard = (props) => {
   const [isHover, setIsHover] = useState(false);
@@ -31,7 +31,7 @@ const PlaneCard = (props) => {
     >
       <CardHeader color="blue-gray" className="relative h-56 rounded-lg">
         <img
-          src={appUrl + warplane.contentUrl}
+          src={baseUrl + warplane.contentUrl}
           alt="média de l'avion"
           layout="fill"
         />

@@ -13,14 +13,13 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
-import { apiInstance, getCurrentUserId } from "../../services/auth.service";
+import { apiInstance, CurrentUserId } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
 export default function Modal({ openModal, handleOpen, userData }) {
   const navigate = useNavigate();
   const validate = (values) => {
     const errors = {};
-    console.log(values.username);
     if (!values.username) {
       errors.username = "Le nom d'utilisateur est requis";
     } else if (values.username.length > 20) {
@@ -55,7 +54,7 @@ export default function Modal({ openModal, handleOpen, userData }) {
 
   const deleteAccount = async () => {
     try {
-      const userId = getCurrentUserId();
+      const userId = CurrentUserId();
       if (!userId) {
         throw new Error("No user id");
       }

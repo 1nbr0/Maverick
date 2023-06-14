@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { apiInstance } from "../../../services/auth.service";
 import { Typography } from "@material-tailwind/react";
 import { Spinner } from "flowbite-react";
+import { baseUrl } from "../../../services/auth.service";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 const useUserWarplaneDetail = () => {
   const [warplane, setWarplane] = useState(null);
@@ -13,7 +15,7 @@ const useUserWarplaneDetail = () => {
     const getWarplane = async () => {
       try {
         const response = await apiInstance.get(`/warplanes/${params.id}`);
-        setWarplane(response);
+        setWarplane(response.data);
       } catch (error) {
         console.error(error);
         setError(error);
@@ -25,7 +27,7 @@ const useUserWarplaneDetail = () => {
   return { warplane, error };
 };
 
-const WarplaneDetail = () => {
+const PlaneCaption = () => {
   const { warplane, error } = useUserWarplaneDetail();
 
   if (error) {
@@ -43,22 +45,43 @@ const WarplaneDetail = () => {
       </div>
     );
   }
-  console.log(warplane);
 
   return (
+    <figure className="relative h-3/4 w-8/12">
+      <img
+        className="h-full w-full rounded-xl"
+        src={baseUrl + warplane.contentUrl}
+        alt="illustration de l'avion"
+      />
+      <figcaption className="absolute bottom-8 left-2/4 flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
+        <div>
+          <Typography variant="h5" color="blue-gray">
+            {warplane.name}
+          </Typography>
+          <Typography color="gray" className="mt-2 font-normal">
+            {warplane.armament}
+          </Typography>
+        </div>
+      </figcaption>
+    </figure>
+  );
+};
+
+const WarplaneDetail = () => {
+  return (
     <>
-      {warplane.length === 0 ? (
-        <div className="text-center">
-          <h1 className="text-2xl font-normal">
-            Nous avons perdu la communication avec la tour de contrôle. Il n'y a
-            aucun avion à disposition. Ajoute en un !
-          </h1>
+      <div className="grid gap-4 pl-40">
+        <div className="flex flex-row justify-start">
+          <Link to="/">
+            <Typography className="text-l font-normal flex flex-row items-center mb-4">
+              <ChevronLeftIcon strokeWidth={2} className="h-4 w-4" /> Retour
+            </Typography>
+          </Link>
         </div>
-      ) : (
-        <div className="grid grid-cols-3 gap-3">
-          <Typography>{warplane.name}</Typography>
+        <div className="flex justify-center">
+          <PlaneCaption />
         </div>
-      )}
+      </div>
     </>
   );
 };

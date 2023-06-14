@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RegisterForms from "../../components/loginForms/RegisterForms";
 import LoginForms from "../../components/loginForms/LoginForm";
 
@@ -8,6 +8,11 @@ const LoginView = () => {
   const childToParent = (childData) => {
     setData(childData);
   };
+
+  useEffect(() => {
+    localStorage.clear();
+    setData(false);
+  }, []);
 
   return (
     <>

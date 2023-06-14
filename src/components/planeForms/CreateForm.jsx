@@ -1,10 +1,14 @@
-import { ArrowUpTrayIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowUpTrayIcon,
+  ChevronLeftIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
 import { Input, Typography, Button } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { apiInstance, getCurrentUserId } from "../../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { apiInstance, CurrentUserId } from "../../services/auth.service";
+import { Link, useNavigate } from "react-router-dom";
 
 function CreateForm() {
   const [file, setFile] = useState();
@@ -17,7 +21,7 @@ function CreateForm() {
   } = useForm();
   const onSubmitForm = async (data) => {
     try {
-      const userId = getCurrentUserId();
+      const userId = CurrentUserId();
       if (!userId) {
         throw new Error("No user id");
       }
@@ -52,6 +56,11 @@ function CreateForm() {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="mt-8 mb-2">
       <div className="block-create-plane">
+        <Typography className="text-l font-normal flex flex-row items-center mb-4">
+          <Link to="/">
+            <ChevronLeftIcon strokeWidth={2} className="h-4 w-4" /> Retour
+          </Link>
+        </Typography>
         <div className="header-warplanes">
           <Typography variant="h1" className="text-3xl font-normal">
             Nouvel avion
@@ -95,7 +104,7 @@ function CreateForm() {
           </label>
           <div>{file && `${file.name} - ${file.type}`}</div>
           <div>
-            {errors.warplaneImage && <span>This field is required</span>}
+            {errors.warplaneImage && <span>Ce champ est obligatoire</span>}
           </div>
         </div>
         <div className="flex flex-col w-full gap-6 mt-4">
@@ -105,19 +114,16 @@ function CreateForm() {
             size="lg"
             label="Nom de votre avion"
           />
-          {errors.warplaneName && <span>This field is required</span>}
+          {errors.warplaneName && <span>Ce champ est obligatoire</span>}
           <Input
             {...register("armaments", { required: true })}
             type="text"
             size="lg"
             label="Armements"
           />
-          {errors.armaments && <span>This field is required</span>}
+          {errors.armaments && <span>Ce champ est obligatoire</span>}
         </div>
       </div>
-      <figure className="relative h-full w-full">
-        <img className="h-full w-full rounded-xl" src={file} alt="nature" />
-      </figure>
     </form>
   );
 }

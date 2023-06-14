@@ -31,7 +31,7 @@ function MenuCard({ isHover, warplaneId }) {
 
   const handleClickEdit = (event) => {
     event.stopPropagation();
-    navigate("/avion/edition/1");
+    navigate(`/avion/edition/${warplaneId}`);
   };
 
   const handleCancelDelete = (event) => {
