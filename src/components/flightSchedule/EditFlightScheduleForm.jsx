@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, PencilIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { Input, Typography, Button } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";

@@ -18,6 +18,7 @@ import {
   getCurrentUser,
   CurrentUserId,
 } from "../../services/auth.service";
+import FlightScheduleList from "../crud/flightSchedule/FlightScheduleList";
 
 const useUserWarplanes = () => {
   const [warplanes, setWarplanes] = useState(null);
@@ -42,9 +43,13 @@ const useUserWarplanes = () => {
         );
         if (!ignore) {
           setWarplanes(response.data["hydra:member"]);
-          setTotalPages(
-            response.data["hydra:view"]["hydra:last"].split("=")[1]
-          );
+          if (response.data["hydra:view"]) {
+            setTotalPages(
+              response.data["hydra:view"]["hydra:last"].split("=")[1]
+            );
+          } else {
+            setTotalPages(1);
+          }
         }
       } catch (error) {
         console.error(error);
@@ -155,7 +160,7 @@ const WarplanesList = () => {
           onClick={prev}
           disabled={active === 1}
         >
-          <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+          <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Précedent
         </Button>
         <div className="flex items-center gap-2">{renderPageButtons()}</div>
         <Button
@@ -165,7 +170,7 @@ const WarplanesList = () => {
           onClick={next}
           disabled={active === totalPages}
         >
-          Next
+          Suivant
           <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
         </Button>
       </div>
@@ -278,6 +283,7 @@ const Home = () => {
             </Button>
           </Link>
         </div>
+        <FlightScheduleList />
       </section>
     </main>
   );

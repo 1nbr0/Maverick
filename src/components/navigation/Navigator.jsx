@@ -6,6 +6,7 @@ import CreateView from "../../views/crud/plane/CreateView";
 import DetailView from "../../views/crud/plane/DetailView";
 import EditView from "../../views/crud/plane/EditView";
 import PrivateRoutes from "./PrivateRoutes";
+import CreateFlightScheduleView from "../../views/crud/flightSchedule/CreateFlightScheduleView";
 
 const Navigator = () => {
   return (
@@ -13,6 +14,10 @@ const Navigator = () => {
       <Route element={<PrivateRoutes />}>
         <Route path="/" element={<Home />} exact />
         <Route path="/nouvel-avion" element={<CreateView />} />
+        <Route
+          path="/nouveau-plan-de-vol"
+          element={<CreateFlightScheduleView />}
+        />
         <Route path="/avion/edition/:id" element={<EditView />} />
         <Route path="/avion/:id" element={<DetailView />} />
       </Route>

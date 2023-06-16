@@ -31,7 +31,6 @@ function CreateForm() {
           owner: "/api/users/" + userId,
           name: data.warplaneName,
           armament: data.armaments,
-          flightSchedules: [],
           file: data.warplanePicture[0],
         },
         {
@@ -56,11 +55,13 @@ function CreateForm() {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="mt-8 mb-2">
       <div className="block-create-plane">
-        <Typography className="text-l font-normal flex flex-row items-center mb-4">
+        <div className="flex flex-row justify-start">
           <Link to="/">
-            <ChevronLeftIcon strokeWidth={2} className="h-4 w-4" /> Retour
+            <Typography className="text-l font-normal flex flex-row items-center mb-4">
+              <ChevronLeftIcon strokeWidth={2} className="h-4 w-4" /> Retour
+            </Typography>
           </Link>
-        </Typography>
+        </div>
         <div className="header-warplanes">
           <Typography variant="h1" className="text-3xl font-normal">
             Nouvel avion

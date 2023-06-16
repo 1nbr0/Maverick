@@ -28,14 +28,18 @@ function App() {
             return response.json();
           })
           .then((data) => {
-            localStorage.access = data.token;
-            localStorage.refresh_token = data.refreshToken;
+            const { token, refreshToken } = data;
+            localStorage.setItem("access", token);
+            localStorage.setItem("refresh_token", refreshToken);
           });
       }
     }
     const minute = 1000 * 60;
-    refreshTokens();
-    setInterval(refreshTokens, minute * 3);
+    const intervalId = setInterval(refreshTokens, minute * 3);
+
+    return () => {
+      clearInterval(intervalId); // Nettoyer l'intervalle lorsque le composant est démonté
+    };
   }, []);
 
   return (

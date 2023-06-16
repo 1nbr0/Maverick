@@ -16,7 +16,7 @@ import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { apiInstance } from "../../services/auth.service";
 
-function MenuCard({ isHover, warplaneId }) {
+function FlightScheduleMenuCard({ isHover, flightScheduleId }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -31,7 +31,7 @@ function MenuCard({ isHover, warplaneId }) {
 
   const handleClickEdit = (event) => {
     event.stopPropagation();
-    navigate(`/avion/edition/${warplaneId}`);
+    navigate(`/plan-de-vol/edition/${flightScheduleId}`);
   };
 
   const handleCancelDelete = (event) => {
@@ -39,21 +39,21 @@ function MenuCard({ isHover, warplaneId }) {
     setOpen(!open);
   };
 
-  const deleteWarplane = async (warplaneId) => {
+  const deleteFlightSchedule = async (flightScheduleId) => {
     try {
-      if (!warplaneId) {
-        throw new Error("No warplane id");
+      if (!flightScheduleId) {
+        throw new Error("No flight schedule id");
       }
-      await apiInstance.delete(`/warplanes/${warplaneId}`);
+      await apiInstance.delete(`/flight_schedule/${flightScheduleId}`);
       refreshPage();
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDeleteWarplane = (event) => {
+  const handleDeleteFlightSchedule = (event) => {
     event.stopPropagation();
-    deleteWarplane(warplaneId);
+    deleteFlightSchedule(flightScheduleId);
   };
 
   return (
@@ -66,7 +66,7 @@ function MenuCard({ isHover, warplaneId }) {
               : "!absolute !top-4 !right-4 opacity-0"
           }
         >
-          <IconButton variant="gradient" color="white">
+          <IconButton variant="outlined" color="light-blue">
             <EllipsisHorizontalIcon strokeWidth={2} className="h-5 w-5" />
           </IconButton>
         </MenuHandler>
@@ -94,10 +94,10 @@ function MenuCard({ isHover, warplaneId }) {
         </MenuList>
       </Menu>
       <Dialog open={open} size="xs" handler={handleOpen}>
-        <DialogHeader>Supprimer un avion</DialogHeader>
+        <DialogHeader>Supprimer un plan de vol</DialogHeader>
         <DialogBody divider>
-          Cela supprimera définitivement l'avion. Êtes-vous sûr de vouloir
-          supprimer cet avion ?
+          Cela supprimera définitivement le plan de vol. Êtes-vous sûr de
+          vouloir supprimer ce vol ?
         </DialogBody>
         <DialogFooter>
           <Button
@@ -108,8 +108,12 @@ function MenuCard({ isHover, warplaneId }) {
           >
             <span>Annuler</span>
           </Button>
-          <Button variant="gradient" color="red" onClick={handleDeleteWarplane}>
-            <span>Supprimer cet avion</span>
+          <Button
+            variant="gradient"
+            color="red"
+            onClick={handleDeleteFlightSchedule}
+          >
+            <span>Supprimer ce plan de vol</span>
           </Button>
         </DialogFooter>
       </Dialog>
@@ -117,4 +121,4 @@ function MenuCard({ isHover, warplaneId }) {
   );
 }
 
-export default MenuCard;
+export default FlightScheduleMenuCard;
