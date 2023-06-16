@@ -15,7 +15,6 @@ import {
 } from "@heroicons/react/24/outline";
 import MaverickLogo from "../../assets/images/maverick-icon.jpg";
 import { useNavigate } from "react-router-dom";
-import { useSignOut } from "react-auth-kit";
 import Modal from "../modal/Modal";
 import { getCurrentUser } from "../../services/auth.service";
 
@@ -34,13 +33,12 @@ const profileMenuItems = [
 function ProfileMenu({ userData }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const signOut = useSignOut();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
 
   const logout = () => {
-    signOut();
+    localStorage.clear();
     navigate("/connexion");
   };
 
@@ -53,7 +51,7 @@ function ProfileMenu({ userData }) {
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
           <Typography className="mr-4 ml-2 cursor-pointer py-1.5 font-normal capitalize">
-            {userData.username ? userData.username : ""}
+            {userData?.username ? userData?.username : ""}
           </Typography>
           <ChevronDownIcon
             strokeWidth={2.5}

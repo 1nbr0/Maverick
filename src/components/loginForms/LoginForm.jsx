@@ -11,13 +11,11 @@ import {
 import axios, { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginForms({ childToParent }) {
   const data = true;
   const [error, setError] = useState("");
-  const signIn = useSignIn();
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
@@ -29,14 +27,13 @@ export default function LoginForms({ childToParent }) {
         values
       );
 
-      signIn({
-        token: response.data.token,
-        expiresIn: 3600,
-        tokenType: "Bearer",
-        authState: { email: values.email },
-      });
+      if (response) {
+        localStorage.setItem("access", response.data.token);
+        localStorage.setItem("refresh_token", response.data.refreshToken);
+      }
 
       navigate("/");
+      window.location.reload();
     } catch (err) {
       if (err && err instanceof AxiosError) {
         setError(err.response?.data.message);

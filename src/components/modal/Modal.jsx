@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
   IconButton,
   Typography,
   Input,
@@ -14,15 +13,13 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useFormik } from "formik";
-import { deleteUser } from "../../services/apiRequest";
-import { getCurrentUserId } from "../../services/auth.service";
+import { apiInstance, CurrentUserId } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
 export default function Modal({ openModal, handleOpen, userData }) {
   const navigate = useNavigate();
   const validate = (values) => {
     const errors = {};
-    console.log(values.username);
     if (!values.username) {
       errors.username = "Le nom d'utilisateur est requis";
     } else if (values.username.length > 20) {
@@ -55,11 +52,17 @@ export default function Modal({ openModal, handleOpen, userData }) {
     validate,
   });
 
-  const deleteAccount = () => {
-    const userId = getCurrentUserId();
-    const isAccountDelete = deleteUser(userId);
-    if (isAccountDelete) {
+  const deleteAccount = async () => {
+    try {
+      const userId = CurrentUserId();
+      if (!userId) {
+        throw new Error("No user id");
+      }
+      await apiInstance.delete(`/users/${userId}`);
+      localStorage.clear();
       navigate("/connexion");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -97,7 +100,7 @@ export default function Modal({ openModal, handleOpen, userData }) {
               onChange={formik.handleChange}
               value={
                 formik.values.username === ""
-                  ? userData.username
+                  ? userData?.username
                   : formik.values.username
               }
               error={formik.errors.username ? true : false}
@@ -123,7 +126,7 @@ export default function Modal({ openModal, handleOpen, userData }) {
               onChange={formik.handleChange}
               value={
                 formik.values.email === ""
-                  ? userData.email
+                  ? userData?.email
                   : formik.values.email
               }
               error={formik.errors.email ? true : false}
@@ -163,6 +166,9 @@ export default function Modal({ openModal, handleOpen, userData }) {
                 {formik.errors.password}
               </Typography>
             ) : null}
+            <Button variant="gradient" color="light-blue" onClick={handleOpen}>
+              Mettre à jour
+            </Button>
           </div>
           <div className="mt-10">
             <Typography variant="h5" color="blue-gray" className="pb-6">
@@ -180,11 +186,6 @@ export default function Modal({ openModal, handleOpen, userData }) {
             </Button>
           </div>
         </DialogBody>
-        <DialogFooter>
-          <Button variant="gradient" color="light-blue" onClick={handleOpen}>
-            Mettre à jour
-          </Button>
-        </DialogFooter>
       </Dialog>
     </>
   );

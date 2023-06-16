@@ -23,7 +23,6 @@ import Cgu from "../rgpd/Cgu";
 export default function RegisterForms({ childToParent }) {
   const data = false;
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -32,15 +31,22 @@ export default function RegisterForms({ childToParent }) {
     setError("");
 
     try {
-      await axios.post("https://localhost/api/register", values);
-      navigate("/connexion");
+      const response = await axios.post(
+        "https://localhost/api/register",
+        values
+      );
+
+      if (response) {
+        localStorage.setItem("refresh_token", response.data.refreshToken);
+      }
+
+      childToParent(data);
     } catch (err) {
       if (err && err instanceof AxiosError) {
         setError(err.response?.data.message);
       } else if (err && err instanceof Error) {
         setError(err.message);
       }
-
       console.log("Error", err);
     }
   };
@@ -113,7 +119,6 @@ export default function RegisterForms({ childToParent }) {
             <div className="mb-4 flex flex-col gap-6">
               <Input
                 size="lg"
-                className="rounded-lg"
                 label="Nom d'utilisateur"
                 id="username"
                 type="text"
@@ -138,7 +143,6 @@ export default function RegisterForms({ childToParent }) {
               ) : null}
               <Input
                 size="lg"
-                className="rounded-lg"
                 label="Email"
                 id="email"
                 type="email"
@@ -162,7 +166,6 @@ export default function RegisterForms({ childToParent }) {
               <Input
                 label="Mot de passe"
                 size="lg"
-                className="rounded-lg"
                 id="password"
                 type="password"
                 onChange={formik.handleChange}
@@ -194,9 +197,9 @@ export default function RegisterForms({ childToParent }) {
                 >
                   J'accepte les
                   <Typography
-                    variant="small"
+                    as="span"
                     onClick={handleOpen}
-                    className="font-medium transition-colors hover:text-blue-500"
+                    className="font-medium text-sm transition-colors hover:text-blue-500"
                   >
                     &nbsp;Conditions générales d'utilisation
                   </Typography>
@@ -252,6 +255,9 @@ export default function RegisterForms({ childToParent }) {
         <DialogFooter className="space-x-2">
           <Button variant="outlined" color="red" onClick={handleOpen}>
             Retour
+          </Button>
+          <Button color="green" onClick={handleOpen}>
+            Accepter
           </Button>
         </DialogFooter>
       </Dialog>
