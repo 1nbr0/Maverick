@@ -44,7 +44,7 @@ function FlightScheduleMenuCard({ isHover, flightScheduleId }) {
       if (!flightScheduleId) {
         throw new Error("No flight schedule id");
       }
-      await apiInstance.delete(`/flight_schedule/${flightScheduleId}`);
+      await apiInstance.delete(`/flight_schedules/${flightScheduleId}`);
       refreshPage();
     } catch (error) {
       console.error(error);

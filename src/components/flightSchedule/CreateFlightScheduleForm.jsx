@@ -38,15 +38,45 @@ const useUserWarplanes = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchWarplanesByView = async (pageId) => {
+      try {
+        const userId = CurrentUserId();
+        if (!userId) {
+          throw new Error("No user id");
+        }
+        if (!pageId) {
+          throw new Error("No page id");
+        }
+        const response = await apiInstance.get(
+          `/users/${userId}/warplanes?page=${pageId}`,
+          {
+            headers: {
+              accept: "application/ld+json",
+            },
+          }
+        );
+        const newWarplanes = response.data["hydra:member"];
+        setWarplanes((prevWarplanes) => [...prevWarplanes, ...newWarplanes]);
+      } catch (error) {}
+    };
     const fetchWarplanes = async () => {
       try {
         const userId = CurrentUserId();
         if (!userId) {
           throw new Error("No user id");
         }
-        const response = await apiInstance.get(`/users/${userId}/warplanes`);
+        const response = await apiInstance.get(`/users/${userId}/warplanes`, {
+          headers: {
+            accept: "application/ld+json",
+          },
+        });
         if (!ignore) {
-          setWarplanes(response.data || []);
+          setWarplanes(response.data["hydra:member"]);
+          if (response.data["hydra:view"]) {
+            fetchWarplanesByView(
+              response.data["hydra:view"]["hydra:next"].split("=")[1]
+            );
+          }
         }
       } catch (error) {
         console.error(error);
@@ -71,9 +101,8 @@ const useUserWarplanes = () => {
 const WarplanesSelect = ({ register, setValue }) => {
   const { warplanes, error } = useUserWarplanes();
 
-  const handleSelectChange = (event) => {
-    const selectedValue = event.target.value;
-    setValue("assignedPlane", selectedValue);
+  const handleSelectChange = (value) => {
+    setValue("assignedPlane", value);
   };
 
   if (error) {
@@ -103,13 +132,13 @@ const WarplanesSelect = ({ register, setValue }) => {
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-3">
-          <Select label="Avion" {...register("assignedPlane")}>
+          <Select
+            label="Avion"
+            {...register("assignedPlane")}
+            onChange={handleSelectChange}
+          >
             {warplanes.map((warplane) => (
-              <Option
-                key={warplane.id}
-                value={String(warplane.id)}
-                onChange={handleSelectChange}
-              >
+              <Option key={warplane.id} value={warplane.id}>
                 {warplane.name}
               </Option>
             ))}
@@ -189,7 +218,7 @@ const DepartureAirportSelect = ({ onDepartureAirportSelect }) => {
             }}
           >
             {airports.map((airport) => (
-              <Option key={airport.id} value={airport.id}>
+              <Option key={airport.id} value={String(airport.id)}>
                 {airport.name}
               </Option>
             ))}
@@ -237,7 +266,7 @@ const ArrivalAirportSelect = ({ onArrivalAirportSelect }) => {
             }}
           >
             {airports.map((airport) => (
-              <Option key={airport.id} value={airport.id}>
+              <Option key={airport.id} value={String(airport.id)}>
                 {airport.name}
               </Option>
             ))}
@@ -283,9 +312,16 @@ const useAirportTracks = (airportId) => {
   };
 };
 
-const DepartureTrackSelect = ({ selectedDepartureAirportId }) => {
+const DepartureTrackSelect = ({
+  selectedDepartureAirportId,
+  register,
+  setValue,
+}) => {
   const { tracks, error } = useAirportTracks(selectedDepartureAirportId);
-  const { register } = useForm();
+
+  const handleSelectChangeDepartureTrack = (value) => {
+    setValue("departureTrack", value);
+  };
 
   if (error) {
     return (
@@ -310,7 +346,11 @@ const DepartureTrackSelect = ({ selectedDepartureAirportId }) => {
         </div>
       ) : (
         <div className="col-span-6 flex flex-col">
-          <Select label="Piste de décollage" {...register("departureTrack")}>
+          <Select
+            label="Piste de décollage"
+            {...register("departureTrack")}
+            onChange={handleSelectChangeDepartureTrack}
+          >
             {tracks.map((track) => (
               <Option key={track.id} value={track.id}>
                 Piste : {track.idTrackNumber} - {track.trackNameQfu}
@@ -323,8 +363,16 @@ const DepartureTrackSelect = ({ selectedDepartureAirportId }) => {
   );
 };
 
-const ArrivalTrackSelect = ({ selectedArrivalAirportId }) => {
+const ArrivalTrackSelect = ({
+  selectedArrivalAirportId,
+  register,
+  setValue,
+}) => {
   const { tracks, error } = useAirportTracks(selectedArrivalAirportId);
+
+  const handleSelectChangeArrivalTrack = (value) => {
+    setValue("arrivalTrack", value);
+  };
 
   if (error) {
     return (
@@ -349,7 +397,11 @@ const ArrivalTrackSelect = ({ selectedArrivalAirportId }) => {
         </div>
       ) : (
         <div className="col-span-6 flex flex-col">
-          <Select label="Piste d'attérissage">
+          <Select
+            label="Piste d'attérissage"
+            {...register("arrivalTrack")}
+            onChange={handleSelectChangeArrivalTrack}
+          >
             {tracks.map((track) => (
               <Option key={track.id} value={track.id}>
                 Piste : {track.idTrackNumber} - {track.trackNameQfu}
@@ -391,21 +443,19 @@ function CreateFlightScheduleForm() {
       if (!userId) {
         throw new Error("No user id");
       }
-      console.log(data);
       const response = await apiInstance.post("/flight_schedules", {
-        name: data.name,
-        idFlight: randomString,
+        name: data.flightScheduleName,
+        idFlight: data.idFlight,
         departureTime: new Date(data.departureDateTime).toISOString(),
         arrivalTime: new Date(data.arrivalDateTime).toISOString(),
-        departureTrack: "/api/warplanes/" + data.departureTrack,
-        arrivalTrack: "/api/warplanes/" + data.arrivalTrack,
+        departureTrack: "/api/tracks/" + data.departureTrack,
+        arrivalTrack: "/api/tracks/" + data.arrivalTrack,
         ownerOfFlightSchedules: "/api/users/" + userId,
-        assignedPlane: "/api/users/" + data.assignedPlane,
+        assignedPlane: "/api/warplanes/" + data.assignedPlane,
       });
-      console.log(response);
-      // if (response) {
-      //   navigate("/");
-      // }
+      if (response) {
+        navigate("/");
+      }
     } catch (err) {
       if (err && err instanceof AxiosError) {
         setErrorForm(err.response?.data.message);
@@ -481,16 +531,19 @@ function CreateFlightScheduleForm() {
       </div>
       <div className="mt-8 mb-4 flex flex-row justify-center w-full gap-6">
         <div className="flex flex-col w-full gap-6 mt-4">
+          <input
+            type="hidden"
+            {...register("idFlight", { value: randomString })}
+          />
           <Input
-            {...register("idFlight")}
             type="text"
             size="lg"
-            value={randomString}
+            defaultValue={randomString}
             disabled={true}
             label="Identifiant du plan de vol"
           />
           <Input
-            {...register("name", { required: true })}
+            {...register("flightScheduleName", { required: true })}
             type="text"
             size="lg"
             label="Nom du plan de vol"
@@ -501,16 +554,20 @@ function CreateFlightScheduleForm() {
             <DepartureAirportSelect
               onDepartureAirportSelect={handleDepartureAirportSelect}
             />
-            <ArrivalAirportSelect
-              onArrivalAirportSelect={handleArrivalAirportSelect}
+            <DepartureTrackSelect
+              selectedDepartureAirportId={selectedDepartureAirportId}
+              register={register}
+              setValue={setValue}
             />
           </div>
           <div className="flex flex-wrap flex-row gap-16">
-            <DepartureTrackSelect
-              selectedDepartureAirportId={selectedDepartureAirportId}
+            <ArrivalAirportSelect
+              onArrivalAirportSelect={handleArrivalAirportSelect}
             />
             <ArrivalTrackSelect
               selectedArrivalAirportId={selectedArrivalAirportId}
+              register={register}
+              setValue={setValue}
             />
           </div>
           <div className="flex flex-wrap flex-row gap-16">

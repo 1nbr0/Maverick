@@ -12,7 +12,6 @@ import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import FlightScheduleIcon from "../../assets/icons/FlightScheduleIcon";
 import DepartureFlight from "../../assets/icons/DepartureFlight";
 import ArrivalFlight from "../../assets/icons/ArrivalFlight";
-import AssignedPlane from "../../assets/icons/AssignedPlane";
 import FlightScheduleMenuCard from "../menu/FlightScheduleMenuCard";
 
 const FlightScheduleCard = (props) => {
@@ -50,8 +49,6 @@ const FlightScheduleCard = (props) => {
 
   const departureDateTime = `${departureDate} - ${departureTime}`;
 
-  console.log(flightSchedule.departureTrack);
-
   const onMouseEnterCard = () => {
     setIsHover(true);
   };
@@ -66,7 +63,10 @@ const FlightScheduleCard = (props) => {
       onMouseEnter={onMouseEnterCard}
       onMouseLeave={onMouseLeaveCard}
     >
-      <FlightScheduleMenuCard isHover={isHover} />
+      <FlightScheduleMenuCard
+        isHover={isHover}
+        flightScheduleId={flightSchedule.id}
+      />
       <CardBody>
         <div className="flex flex-row flex-wrap gap-4">
           <FlightScheduleIcon className="fill-green-500" />
@@ -128,7 +128,7 @@ const FlightScheduleCard = (props) => {
         <Button
           variant="outlined"
           color="light-blue"
-          onClick={() => navigate(`/plan-de-vol/1`)}
+          onClick={() => navigate(`/plan-de-vol/${flightSchedule.id}`)}
           className="flex items-center gap-2 hover:bg-gradient-to-bl hover:from-cyan-500 hover:to-blue-500 hover:text-white"
         >
           En savoir plus
